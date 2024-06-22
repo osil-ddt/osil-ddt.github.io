@@ -6,7 +6,7 @@
         content="Deep Demonstration Tracing: Learning Generalized Imitator for Runtime Imitation from Single Demonstration">
   <meta name="keywords" content="Deep Demonstration Tracing, one-shot imitation learning">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>[TO BE DONE]Deep Demonstration Tracing: Learning Generalized Imitator for Runtime Imitation from Single Demonstration</title>
+  <title>Deep Demonstration Tracing: Learning Generalized Imitator for Runtime Imitation from Single Demonstration</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -193,39 +193,211 @@
             In real-world scenario, the environment is dynamic, e.g., unexpected changes can occur after demonstration. 
             Thus, achieving generalization of the imitator agent is crucial as agents would inevitably face situations unseen in the provided demonstrations.
             While traditional OSIL methods excel in relatively stationary settings, their adaptability to such unforeseen changes, 
-            which asking for a higher level of generalization ability for the imitator agents, is limited and rarely discussed. In this work, we present a new algorithm called <b>D</b>eep <b>D</b>emonstration <b>T</b>racing (DDT).
+            which asking for a higher level of generalization ability for the imitator agents, is limited and rarely discussed (See the following Figure). In this work, we present a new algorithm called <b>D</b>eep <b>D</b>emonstration <b>T</b>racing (DDT).
              In DDT, we propose a demonstration transformer architecture to encourage agents to adaptively trace suitable states in demonstrations. 
              Besides, it integrates OSIL into a meta-reinforcement-learning training paradigm, providing regularization for policies in unexpected situations. 
              We evaluate DDT on a new navigation task suite and robotics tasks, demonstrating its superior performance over existing OSIL methods across all evaluated tasks in dynamic environments with unforeseen changes.
           </p>
+          <center>
+            <img src="./static/images/ddt-res-illustration.png"
+                     class="interpolation-image"
+                     style="max-width: 70%;"
+                     alt="."/>
+                     <p><b>Illustration of OSIL policies under unforeseen changes in Meta-World tasks.</b>
+                      The policy in (b) is trained by traditional OSIL. 
+                      The grasped block may drop by chance due to disturbances that do not exist during demonstration collection. 
+                   </p>
+                  </center>
         </div>
       </div>
     </div>
-    <!--/ Abstract. -->
 
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">The  demonstration transformer architecture </h2>
-        <img src="./static/images/DT_arch.jpg"
-                 class="interpolation-image"
-                 alt="."/>
-                 <p>The demonstration transformer architecture for the actor. 
-                  \( [s^e_0, \ldots, s^e_i, \ldots, s^e_t] \) denote expert states
-                  and \( [a^e_0, \ldots, a^e_i, \ldots, a^e_t] \) the expert action list.
-                  \( s_j \) is the visited state of the actor at timestep \( j \).
-                   We adopt \( \mathbf{q} \), \( \mathbf{k} \), and \( \mathbf{v} \) to denote the query, key, and value vectors of an attention module. 
-                   \( N\times \) denotes an \( N \)-layer demo-attention module, which takes the output \( v'' \) of the last layer as the input \( q_j \) of the next layer. 
-                   Note that the expert-state encoder and the visited state encoder shared the same weights.
-               </p>
-      </div>
-    </div>
-    <!--/ Paper video. -->
   </div>
 </section>
+<section>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-3">Methodology </h2>
+    </div>
+    <hr class="rounded">
+    <h3 class="title is-4">The Demonstration Transformer Architecture for Demonstration Tracing </h3>
+    
+      <div class="content has-text-justified">
+        <center>
+        <img src="./static/images/example-dt.jpg"
+                  class="interpolation-image"
+                  alt="."/>
+        <p> <b>Illustration of Demonstration Transformer Architecture and the motivation example.</b> (a) Illustration of how humans achieve OSIL under unforeseen changes; (b) The demonstration transformer architecture for the actor. 
+        \( [s^e_0, \ldots, s^e_i, \ldots, s^e_t] \) denote expert states
+        and \( [a^e_0, \ldots, a^e_i, \ldots, a^e_t] \) the expert action list.
+        \( s_j \) is the visited state of the actor at timestep \( j \).
+          We adopt \( \mathbf{q} \), \( \mathbf{k} \), and \( \mathbf{v} \) to denote the query, key, and value vectors of an attention module. 
+          \( N\times \) denotes an \( N \)-layer demo-attention module, which takes the output \( v'' \) of the last layer as the input \( q_j \) of the next layer. 
+          Note that the expert-state encoder and the visited state encoder shared the same weights.
+        </p>
+      </center>
+      </div>
+
+    <h3 class="title is-4">Achieve OSIL via Context-based Meta-RL</h3>
+    <div class="content has-text-justified">
+   
+    <p>
+      Conventional OSIL approaches are predominantly based on training with behavior cloning losses, which also fails to guarantee robust decision-making capabilities in unseen states. 
+      Drawing inspiration from methodologies that integrate  IL with RL through a stationary imitation reward, we incorporate OSIL into a context-based meta-RL framework. 
+      Within this framework, we can utilize the trial-and-error learning mechanism of RL to allow the imitation policy to systematically explore the state space and effectively achieve decision-making proficiency in unseen states.  
+    </p>
+
+    <center>
+      <img src="./static/images/itorl_setting.jpg"
+                class="interpolation-image"
+                alt="."/>
+                <p> <b>Illustration of Training a One-shot imitator policy via meta-RL.</b> 
+              </p>
+      </center>
+  </div> 
+  </div>
+  </section>
 
 <section class="section">
   <div class="container is-max-desktop">
+
+  <div class="columns is-centered has-text-centered">
+  <h2 class="title is-3">Experiments</h2>
+  </div>
+  <hr class="rounded">
+  <div class="content has-text-justified">
+    <p>In experiments, we focus on answering the following research questions.</p>
+    <ul>
+      <li><b>RQ1</b>: The one-shot imitation ability of DDT in unseen situations, including <b>unseen demonstrations, unseen environments, and unforeseen changes</b> after demonstration collection.</li>
+      <li><b>RQ2</b>: Does demonstration transformer really imitating via tracing the demonstration? </li>
+      <li><b>RQ3</b>: Can DDT have potential of performance improvement when scaling up the size of parameters and demonstration data, inspired by the <b>"Scaling Law"</b> in large language models.</li>
+      <li><b>RQ4</b>: The performance of DDT when Apply it in Other Challenging Tasks.
+    </ul>
+  </div>
+
+  
+  <h3 class="title is-4">Environments</h3>
+  <div class="content has-text-justified">
+    <p>
+      We created a challenging benchmark, named Valet Parking Assist in Maze (VPAM), to assess OSIL's performance for unforeseen changes. This navigation benchmark is inspired by a popular and practical real-world application in autonomous driving, called <a href="https://www.youtube.com/watch?v=NLgCXYWqjcg">Valet Parking Assist (VPA)</a>.
+      VPAM focuses on navigating diverse, complex mazes without global map information. 
+      We also apply DDT in various standard and complex tasks, including meta-world,  <a href="https://jingchengpang.github.io/files/pdf/iros23_o3f.pdf">complex robotics manipulations in clutter</a>, and Reacher and Pusher in MuJoCo to show the robustness of our method in other challenges of OSIL.
+    </p>
+    <center>
+    <img src="./static/images/ddt-exp-ill.png"
+    class="interpolation-image"
+    alt="."/>
+    <p>
+      <b>Illustration of Major Experiments in this paper.</b> (A) Illustration of the VPAM, which is a new benchmark for OSIL with unforseen changes.
+      The imitation points are provided by our DDT method. (B) Illustration of tasks in Meta-Wolrd. (C) Various Complex tasks of robot manipulation in clutter environments. (a): Grasp the blocked target object (cyan). (b): Stack the objects. (c): Collect the objects scattered over the desk together to the specified area (yellow).
+    </p>
+  </center>
+  </div>
+  <h3 class="title is-4">RQ1: One-Shot Imitation Ability in Unseen Situations</h3>
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+      <!-- Visual Effects. -->
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3"></h2>
+          <img src="./static/images/hist.jpg"
+                 class="interpolation-image"
+                 alt="."/>
+          <p>
+          <b>Illustration of the imitation policies' performance deployed among different group of settings in VPAM.</b> The black bars denote the standard error among task-group with three seeds.
+          Results show that DDT reach the significantly better performance than the baselines from training performance ("Train" Group) to deployment performance whenever with unforseen obstacle ("Unforseen Obstacle" Group) or without obstacle ("Non-Obstacle" Group).
+          </p>
+        </div>
+      </div>
+      <!--/ Visual Effects. -->
+
+      <!-- Matting. -->
+      <div class="column">
+        <h2 class="title is-3"></h2>
+        <div class="columns is-centered">
+          <div class="column content">
+            <img src="./static/images/pref_curve.JPG"
+                 class="interpolation-image"
+                 alt="."/>
+              <p>
+              <b>Illustration of the imitation policies' training performance among different settings.</b> The colored areas denote the standard error among the three seeds.
+              DDT displayed a distinct performance even in the training task.  We attribute this to the integration of the demonstration transformer architecture. This architecture conferred an additional training efficiency boost by implicitly introducing prior knowledge of how OSIL was achieved, facilitating easier adaptation across various tasks and settings with different complexities.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p>
+
+    --
+  </p>
+  <h3 class="title is-4">RQ2: Demonstration-Attention Mechanism for Demonstration Tracing in DDT</h3>
+  <p>
+   We visualize the agent trajectory in a randomly generated map with unforeseen obstacles and depict attention scores during the decision-making process. 
+   The attention scores are the product of the query of current state and the keys associated with demonstration states. 
+   It is evident that higher attention values are predominantly concentrated on the diagonal, demonstrating our algorithm's ability to identify which state to follow.
+  </p>
+  <div class="content has-text-justified">
+  <center>
+    
+  <img src="./static/images/attention.jpg"
+  style="max-width: 50%;"
+  alt="."/>
+  <p>
+    <b>Visualizations of DDT in VPAM.</b> (a) A trajectory generated by DDT; (b) The attention score map corresponding to (a). The horizontal and vertical axis represent the agent's trajectory index.
+    The deeper color in a row represents the higher attention score.
+  </p>
+</div>
+</center>
+  <p>
+    Additionally, a corresponding video recording rollouts generated by our DDT method.
+  </p>
+  <p>TODO add video</p>
+<h3 class="title is-4">RQ3: Scaling Law of DDT in the OSIL Setting</h3>
+<p>TODO </p>
+
+<h3 class="title is-4">RQ4: Apply DDT in Other Challenging Tasks.</h3>
+
+<p><b> Meta-world: Performance under Disturbance</b> (add video, add simple explanintions)</p>
+
+<div class="columns is-centered has-text-centered">
+  <div class="column is-four-fifths">
+    <img src="./static/images/metaworld_table.JPG"
+             class="interpolation-image"
+             alt="."/>
+             <p>
+              Main Results on MetaWorld
+           </p>
+  </div>
+</div>
+
+<p><b> Meta-world: Training on Mixed-Up Environments</b> (add video, add simple explanintions)</p>
+TODO: add results
+
+<p><b> Meta-world: Deploying on Unseen Environments</b> (add video, add simple explanintions)</p>
+
+TODO: add results
+
+<p><b>Complex Decision-making Tasks </b>(add simple explanintions)</p>
+<div class="columns is-centered has-text-centered">
+  <div class="column is-four-fifths">
+    <img src="./static/images/others_table.JPG"
+             class="interpolation-image"
+             alt="."/>
+             <p>
+              Main Results on Complex Manipulation and Complex Control Space
+           </p>
+  </div>
+</div>
+
+
+</section>
+
+<section class="section">
+  <!-- <div class="container is-max-desktop">
 
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
@@ -236,75 +408,14 @@
                  <p>
                </p>
       </div>
-    </div>
+    </div> -->
 
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Main Results on MetaWorld</h2>
-        <img src="./static/images/metaworld_table.JPG"
-                 class="interpolation-image"
-                 alt="."/>
-                 <p>
-               </p>
-      </div>
-    </div>
+    
 
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Main Results on Complex Manipulation and Complex Control Space</h2>
-        <img src="./static/images/others_table.JPG"
-                 class="interpolation-image"
-                 alt="."/>
-                 <p>
-               </p>
-      </div>
-    </div>
 
   </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3"></h2>
-          <p>
-            Illustration of the imitation policies' performance deployed among different settings. The black bars denote the standard error among tasks with three seeds.
-          </p>
-          <img src="./static/images/hist.jpg"
-                 class="interpolation-image"
-                 alt="."/>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
-
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3"></h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              Illustration of the imitation policies' training performance among different settings. The colored areas denote the standard error among the three seeds.
-            </p>
-            <img src="./static/images/pref_curve.JPG"
-                 class="interpolation-image"
-                 alt="."/>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <!--/ Matting. -->
-
-   
-
   </div>
 </section>
-
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
